@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.entity.Admin;
+import com.example.response.Result;
 import com.example.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,28 +19,28 @@ public class AdminController {
 
     @Operation(summary="新增管理员")
     @PostMapping("/admin/add")
-    public Long add(@RequestBody Admin admin){
+    public Result add(@RequestBody Admin admin){
         adminService.save(admin);
-        return admin.getId();
+        return Result.success();
     }
 
     @Operation(summary="管理员信息列表")
     @GetMapping("/admin/list")
-    public List<Admin> list(){
-        return adminService.list();
+    public Result<List<Admin>> list(){
+        return Result.data(adminService.list());
     }
 
     @Operation(summary="修改管理员")
     @PostMapping("/admin/update")
-    public Long update(@RequestBody Admin admin){
+    public Result update(@RequestBody Admin admin){
         adminService.updateById(admin);
-        return admin.getId();
+        return Result.success();
     }
 
     @Operation(summary="删除管理员")
     @PostMapping("/admin/delete")
-    public String delete(@RequestParam Long id){
+    public Result delete(@RequestParam Long id){
         adminService.removeById(id);
-        return "success";
+        return Result.success();
     }
 }

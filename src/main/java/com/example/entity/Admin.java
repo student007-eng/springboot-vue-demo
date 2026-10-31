@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.Getter;
 
 @Data
 /**加了这个注解可以不用写get,set方法**/
 @TableName("`admin`")
 /**指定表名**/
+@Getter
 @Schema(description = "管理员信息实体类")
 public class Admin {
     /**告诉它这是主键，并且是自动递增的**/
@@ -28,4 +30,5 @@ public class Admin {
     private String tel;//电话
     @Schema(description = "头像")
     private String headurl;//头像
+
 }
