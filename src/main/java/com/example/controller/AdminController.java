@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Admin;
 import com.example.response.Result;
 import com.example.service.AdminService;
@@ -25,9 +28,21 @@ public class AdminController {
     }
 
     @Operation(summary="管理员信息列表")
-    @GetMapping("/admin/list")
-    public Result<List<Admin>> list(){
-        return Result.data(adminService.list());
+    @PostMapping("/admin/list")
+    public Result<Page<Admin>> list(
+            @RequestBody Admin admin,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "2") Integer pageSize){
+        //模糊查询
+        LambdaQueryWrapper<Admin> lambdaQueryWrapper=new LambdaQueryWrapper();
+        lambdaQueryWrapper.like(admin.getName()!=null,Admin::getName,admin.getName());
+        lambdaQueryWrapper.like(admin.getTel()!=null,Admin::getTel,admin.getTel());
+        lambdaQueryWrapper.like(admin.getUsername()!=null,Admin::getUsername,admin.getUsername());
+        //使用Mybatis-Plus自带的分页
+        Page<Admin> page=new Page<>(pageNum,pageSize);
+        //执行查询，把条件和分页对象一起传进去
+        Page<Admin> resultPage=adminService.page(page,lambdaQueryWrapper);
+        return Result.data(resultPage);
     }
 
     @Operation(summary="修改管理员")
