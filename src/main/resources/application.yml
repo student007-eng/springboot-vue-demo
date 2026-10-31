@@ -17,3 +17,20 @@ spring:
       test-on-borrow: true               #每次从池子取出连接的时候，执行 validation-query 校验
       test-while-idle: true              #后台空闲扫描线程（eviction 线程）扫描空闲连接的时候，顺便探活
       test-on-return: false              #业务用完连接、归还回池子的时候，校验连接,默认false
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ur.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    group: 'dafault'
+    paths-to-match: '/**'
+    package-to-scan: com.example.controller
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+    swagger-model-name: 实体类列表
