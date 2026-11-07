@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public enum ResponseCode {
     SUCCESS(200,"操作成功！"),
+    USERNAME_EXIT(1001,"用户名已存在！"),
     ERROR(500,"操作失败！");
 
     /**响应状态码**/

@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.entity.Admin;
+import com.example.exception.BussinessException;
+import com.example.response.ResponseCode;
 import com.example.response.Result;
 import com.example.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,12 @@ public class AdminController {
     @Operation(summary="新增管理员")
     @PostMapping("/admin/add")
     public Result add(@RequestBody Admin admin){
+        LambdaQueryWrapper<Admin> lambdaQueryWrapper=new LambdaQueryWrapper();
+        lambdaQueryWrapper.eq(Admin::getUsername,admin.getUsername());
+        long count=adminService.count(lambdaQueryWrapper);
+        if(count>0){
+            throw new BussinessException(ResponseCode.USERNAME_EXIT);
+        }
         adminService.save(admin);
         return Result.success();
     }
