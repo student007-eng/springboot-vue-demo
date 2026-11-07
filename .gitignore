@@ -19,6 +19,12 @@ target/
 *.iml
 *.ipr
 
+### front-ignore ###
+front-vue/node_modules/
+front-vue/dist/
+front-vue/.vite/
+front-vue/.env.local
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
