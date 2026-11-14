@@ -15,18 +15,15 @@ body {
 //后台管理顶部菜单相关样式
 .header {
   width: 100%;
-  height: 90px;
+  height: var(--header--menu-height);
   padding: 0 20px;
-  position: fixed;
-  z-index: 11;
-  left: 0;
-  top: 0;
   background: @head;
+  box-sizing: border-box;
 }
 .header-menu {
   position: relative;
   list-style: none;
-  height: @header--menu-height;
+  height: var(--header--menu-height);
 }
 .header-logo {
   float: left;
@@ -61,18 +58,14 @@ body {
 }
 
 //左侧菜单栏相关样式
-.pdm-sidebar {
-  position: fixed;
-  top: 90px;
-  left: 0;
-  bottom: 0;
-  z-index: 1000;
-  width: @pdm--sidebar-width;
+.wcy-sidebar {
+  height: 100%;
+  width: @wcy--sidebar-width;
   overflow: hidden;
   &--dark,
   &--dark-popper {
     background-color: @sidebar--background-color-dark;
-    .pdm-sidebar__menu.el-menu,
+    .wcy-sidebar__menu.el-menu,
     > .el-menu--popup {
       background-color: @sidebar--background-color-dark;
     }
@@ -95,18 +88,16 @@ body {
     }
   }
   &__inner {
-    position: relative;
-    z-index: 1;
-    width: 250px;
+    width: 100%;
     height: 100%;
     padding-bottom: 15px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   &__menu.el-menu {
-    width: @pdm--sidebar-width;
+    width: @wcy--sidebar-width;
     border-right: 0;
   }
-  &__menu-icon {
+  &__menu-icon {/* 去掉 el-aside 自带的滚动条 */
     width: 24px;
     margin-right: 5px;
     text-align: center;
@@ -119,14 +110,14 @@ body {
   font-size: @sidebar--menu--title-size;
   font-weight: bold;
 }
-.pdm-content {
+.wcy-content {
   position: relative;
   padding: 15px;
   background: #f5f5f5;
   &__wrapper {
     position: relative;
     width: 100%;
-    margin-left: @pdm--sidebar-width;
+    margin-left: @wcy--sidebar-width;
     min-height: 100%;
   }
 }
