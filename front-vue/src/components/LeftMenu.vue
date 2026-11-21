@@ -9,7 +9,7 @@
         <span slot="title">首页</span>
       </el-menu-item>
 
-      <el-menu-item index="welcome" @click="$router.push({ path: '/Welcome' })">
+      <el-menu-item index="welcome" @click="$router.push({ path: '/index/welcome' })">
         <el-icon>
           <Document />
         </el-icon>
@@ -23,7 +23,7 @@
           </el-icon>
           <span slot="title">管理员信息管理</span>
         </template>
-        <el-menu-item index="admin" @click="$router.push({ path: '/admin' })">
+        <el-menu-item index="admin" @click="$router.push({ path: '/index/admin' })">
           <el-icon>
             <Document />
           </el-icon>
