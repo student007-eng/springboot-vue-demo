@@ -12,7 +12,13 @@ const router = createRouter({
       children: [
         {
           path: '/welcome',
-          component: () => import('../views/WelcomeVue.vue'),
+          name: 'Welcome',
+          component: () => import('../views/Welcome.vue'),
+        },
+        {
+          path: '/admin',
+          name: 'Admin',
+          component: () => import('../views/admin/List.vue'),
         },
       ],
     }

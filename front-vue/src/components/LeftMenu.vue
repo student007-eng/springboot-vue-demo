@@ -21,9 +21,9 @@
           <el-icon>
             <Document />
           </el-icon>
-          <span slot="title">组织管理</span>
+          <span slot="title">管理员信息管理</span>
         </template>
-        <el-menu-item index="admin" @click="$router.push({ name: 'admin' })">
+        <el-menu-item index="admin" @click="$router.push({ path: '/admin' })">
           <el-icon>
             <Document />
           </el-icon>
