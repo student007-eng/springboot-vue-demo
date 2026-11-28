@@ -1,15 +1,15 @@
 <template>
     <el-dialog
   v-model="dialogVisible"
-  title="新增"
+  :title="!form.id?'新增':'编辑'"
   width="500"
 >
   <el-form :rules="rules" :model="form" ref="formRef" label-width="100px">
-    <el-form-item label="用户名" prop="username" :rules="rules.username">
+    <el-form-item label="用户名" prop="username" :readonly="readonly" :rules="rules.username">
       <el-input v-model="form.username" placeholder="用户名" />
     </el-form-item>
     <el-form-item label="密码" prop="userpwd" :rules="rules.userpwd">
-      <el-input v-model="form.userpwd" placeholder="密码" />
+      <el-input v-model="form.userpwd" type="password" placeholder="密码" />
     </el-form-item>
     <el-form-item label="姓名" prop="name" :rules="rules.name">
       <el-input v-model="form.name" placeholder="姓名" />
@@ -46,13 +46,23 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { adminApi } from '@/api/admin-api';
+import { ElMessage } from 'element-plus';
 defineExpose({showDialog})
 // 控制弹窗显示隐藏
 const dialogVisible = ref(false);
 const btnLoading = ref(false);
 const emit=defineEmits(['refresh']);
-function showDialog() {
-  dialogVisible.value = true;
+const readonly=ref(false);
+function showDialog(row) {
+    if(row){
+        readonly.value=true;
+        Object.assign(form,row);
+    }else{
+        readonly.value=false;
+        Object.assign(form,formDefault);
+    }
+    
+    dialogVisible.value = true;
 }
 //表单组件
 const formRef=ref();
@@ -94,15 +104,26 @@ const rules=reactive({
     ]
 
 })
+
 function onSubmit() {
-    formRef.value.validate().then(async () => {
+    try{
         btnLoading.value=true;
-        await adminApi.add(form);
+        formRef.value.validate().then(async () => {
+            if(form.id){
+                await adminApi.update(form);
+            }else{ 
+                await adminApi.add(form);
+            }
+            ElMessage.success("${form.id ? '修改' : '添加'}成功");
+            btnLoading.value=false;
+            dialogVisible.value=false;
+            emit('refresh');
+        })
+    }catch(err){
+
+    }finally{
         btnLoading.value=false;
-        dialogVisible.value=false;
-        emit('refresh');
-    
-  });
+    }
   console.log("form.username:", form.username);
 }
 </script>

@@ -10,13 +10,13 @@
     <el-form-item >
         <el-button type="primary" @click="onSearch">查询</el-button>
         <el-button type="primary" @click="add()">新增</el-button>
-        <el-button type="danger" >批量删除</el-button>
+        <el-button type="danger"  @click="confirmDel()">批量删除</el-button>
     </el-form-item>
     
 
     <el-divider border-style="dashed" />
 
-    <el-table  border :data="datalist" v-loading="listLoading" style="width: 100%"  :header-cell-style="{ background: '#f5f5f5' }">
+    <el-table  border :data="datalist" v-loading="listLoading" style="width: 100%"  :header-cell-style="{ background: '#f5f5f5' }" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
         <el-table-column header-align="center" align="center" label="用户名" prop="username" />
         <el-table-column header-align="center" align="center" label="姓名" prop="name" />
@@ -26,8 +26,8 @@
 
         <el-table-column header-align="center" align="center" label="操作" >
             <template #default="scope">
-                <el-button type="text" size="mini" >编辑</el-button>
-                <el-button type="text" size="mini" >删除</el-button>
+                <el-button type="text" size="mini" @click="update(scope.row)">编辑</el-button>
+                <el-button type="text" size="mini" @click="confirmDel(scope.row.id)">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -43,6 +43,7 @@ import { adminApi } from '@/api/admin-api';
 import { onMounted } from 'vue';
 import Constants from '@/utils/constants';
 import Addorupdate from './Addorupdate.vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
 //列表数据
 const datalist=ref([]);
 //列表加载状态
@@ -51,6 +52,8 @@ const listLoading=ref(false);
 const total=ref(0);
 //定义引用新增或修改组件的响应式变量
 const operateRef=ref();
+//所有选中的记录
+const multipeSelection=ref([]);
 //表单的初始值
 const queryFormState={
   name:'',
@@ -86,6 +89,45 @@ function handleCurrentPageChange(val: number) {
 
 function add(){
   operateRef.value.showDialog();
+}
+function confirmDel(id){
+  ElMessageBox.confirm('是否确认删除?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    del(id);
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消删除'
+    })
+  })
+}
+async function del(id){
+  try{
+    listLoading.value=true;
+    let ids=id?[id]:multipeSelection.value.map(item=>item.id);
+    if(ids.length==0){
+      ElMessage.warning("请选择要删除的记录");
+      return;
+    }
+    await adminApi.delete(ids);
+    ElMessage.success("删除成功");
+    getList();
+  }catch(err){
+
+  }finally{
+    listLoading.value=false;
+  }
+  
+}
+function update(row) {
+    operateRef.value.showDialog(row);
+}
+
+function handleSelectionChange(val) {
+  multipeSelection.value = val;
 }
 onMounted(getList);
 </script>
